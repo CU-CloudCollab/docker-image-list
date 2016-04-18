@@ -27,7 +27,7 @@ const transform = {
         html: '${namespace}'
     }, {
         tag: 'td',
-        html: '<a href="https://dtr.cs.cucloud.net/repositories/${namespace}/${name}/details">${name}</a>'
+        html: '<a href="https://dtr.cucloud.net/repositories/${namespace}/${name}/details">${name}</a>'
     }, {
         tag: 'td',
         html: '${shortDescription}'
