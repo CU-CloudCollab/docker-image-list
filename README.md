@@ -1,11 +1,11 @@
 # docker-image-list
 
-This repo contains a Node.js script to list images in a Docker repository The output of the script is stored on S3. Supplemental scripts create and upload an AWS Lambda function for the script and schedule the function to run daily. 
+This repo contains a Node.js script to list images in a Docker repository. The output of the script is stored on S3. Supplemental scripts create and upload an AWS Lambda function for the script and schedule the function to run daily. 
 
 This can be used as an example of:
 * [Node.js](https://nodejs.org/en/) function in Lambda
 * creating a Lambda function from the command line
-* creating a AWS scheduled event from the command line
+* creating an AWS scheduled event from the command line
 * linking an AWS scheduled event to a Lambda function (from the command line)
 
 ## JavaScripts
