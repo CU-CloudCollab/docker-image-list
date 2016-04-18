@@ -3,14 +3,7 @@
 // node-rest-client https://www.npmjs.com/package/node-rest-client
 const json2html = require('node-json2html');
 const RestClient = require('node-rest-client').Client;
-const client = new RestClient({
-    connection: {
-        rejectUnauthorized: false,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }
-});
+const client = new RestClient();
 
 let aws = require('aws-sdk');
 let s3 = new aws.S3({ apiVersion: '2006-03-01' });
@@ -77,7 +70,7 @@ exports.myhandler = (event, context, callback) => {
       });
     }
 
-    client.get("https://dtr.cs.cucloud.net/api/v0/repositories/cs", {
+    client.get("https://dtr.cucloud.net/api/v0/repositories/cs", {
         parameters: {
             start: 0,
             limit: 9999
