@@ -36,7 +36,7 @@ This can be used as an example of:
 
 These scripts expect the following on your development workstation:
 * [Node.js](https://nodejs.org/en/)
-* [NOM](https://www.npmjs.com/)
+* [NPM](https://www.npmjs.com/)
 * NPM modules:
   * [aws-sdk](https://www.npmjs.com/package/aws-sdk)
   * [node-json2html](https://www.npmjs.com/package/node-json2html)
