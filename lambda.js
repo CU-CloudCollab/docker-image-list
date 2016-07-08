@@ -3,7 +3,6 @@
 // node-rest-client https://www.npmjs.com/package/node-rest-client
 const json2html = require('node-json2html');
 const RestClient = require('node-rest-client').Client;
-const client = new RestClient();
 
 let aws = require('aws-sdk');
 let s3 = new aws.S3({ apiVersion: '2006-03-01' });
@@ -33,49 +32,67 @@ const transform = {
     }]
 };
 
-exports.myhandler = (event, context, callback) => {
+var dtr_rest_callback = function(data, response) {
 
-    var rest_callback = function(data, response) {
+  var filtered_data = data.repositories.filter( function(item) {
+    return item.visibility === 'public';
+  });
 
-      var x = '<table>'
-              + ouput_header
-              + json2html.transform(data.repositories, transform)
-              + '</table><p>Updated at '
-              + new Date().toISOString()
-              + '</p>';
+  // console.log(filtered_data);
 
-      // parsed response body as js object
-      // console.log(data);
-      // console.log('---------------------------------------------------');
-      // console.log(x);
-      // console.log('---------------------------------------------------');
+  var x = '<table>'
+          + ouput_header
+          + json2html.transform(filtered_data, transform)
+          + '</table><p>Updated at '
+          + new Date().toISOString()
+          + '</p>';
 
-      var s3Params = {
-        Bucket: 'cu-cs-docker-registry-html', /* required */
-        Key: 'dtr.cs.cucloud.net.image-list.html', /* required */
-        ACL: 'public-read',
-        ContentType: 'text/html',
-        Expires: new Date(),
-        Body: x
-      };
-      s3.putObject(s3Params, function(err, data) {
-        if (err) {
-          console.log(err, err.stack); // an error occurred
-          callback(err, "failure");
-        }
-        else {
-          console.log(data);           // successful response
-          callback(null, "success");
-        }
-      });
+  // parsed response body as js object
+  // console.log(data);
+  //
+  // console.log('---------------------------------------------------');
+  // console.log(x);
+  // console.log('---------------------------------------------------');
+
+  var s3Params = {
+    Bucket: 'cu-cs-docker-registry-html', /* required */
+    Key: 'dtr.cs.cucloud.net.image-list.html', /* required */
+    ACL: 'public-read',
+    ContentType: 'text/html',
+    Expires: new Date(),
+    Body: x
+  };
+  s3.putObject(s3Params, function(err, data) {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
     }
+    else {
+      console.log(data);           // successful response
+    }
+  });
+}
 
-    client.get("https://dtr.cucloud.net/api/v0/repositories/cs", {
-        parameters: {
-            start: 0,
-            limit: 9999
-        }}, rest_callback);
+exports.myhandler = (event, context) => {
 
-    // callback(null, "success");
-    // callback('Something went wrong');
+  var s3Params = {
+    Bucket: 'cu-cs-docker-registry-html',
+    Key: 'dtr-credentials.json'
+  };
+  s3.getObject(s3Params, function(err, data) {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
+    }
+    else {
+      var options_auth = JSON.parse(data.Body.toString());
+      // console.log(options_auth);
+      const client = new RestClient(options_auth);
+
+      client.get("https://dtr.cucloud.net/api/v0/repositories/cs",
+          {parameters: {
+              start: 0,
+              limit: 9999}
+          },
+          dtr_rest_callback);
+    }
+  });
 };

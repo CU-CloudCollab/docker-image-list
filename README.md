@@ -1,6 +1,6 @@
 # docker-image-list
 
-This repo contains a Node.js script to list images in a Docker repository. The output of the script is stored on S3. Supplemental scripts create and upload an AWS Lambda function for the script and schedule the function to run daily. 
+This repo contains a Node.js script to list images in a Docker repository. The output of the script is stored on S3. Supplemental scripts create and upload an AWS Lambda function for the script and schedule the function to run daily.
 
 This can be used as an example of:
 * [Node.js](https://nodejs.org/en/) function in Lambda
@@ -45,9 +45,9 @@ These scripts expect the following on your development workstation:
 
 ## AWS Resource Dependencies
 
-**S3.** These scripts expect an S3 bucket has already been created to use as the target for the Lambda code package, and for holding Lambda funciton outputs. In running these scripts you need enough privileges on S3 to create/update objects in this bucket. 
+**S3.** These scripts expect an S3 bucket has already been created to use as the target for the Lambda code package, and for holding Lambda funciton outputs. In running these scripts you need enough privileges on S3 to create/update objects in this bucket.
 
-**IAM Role.** The IAM role referenced in these scripts is a role that combines AWSLambdaBasicExecutionRole (a standard built-in AWS role) and a custom role that gives the Lambda function access to the specified S3 bucket. That custom role is: 
+**IAM Role.** The IAM role referenced in these scripts is a role that combines AWSLambdaBasicExecutionRole (a standard built-in AWS role) and a custom role that gives the Lambda function access to the specified S3 bucket. That custom role is:
 
 ```
 {
@@ -62,6 +62,14 @@ These scripts expect the following on your development workstation:
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::cu-cs-docker-registry-html/*"
+        },
+        {
+            "Sid": "Stmt1460742559008",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::cu-cs-docker-registry-html/dtr-credentials.json"
         }
     ]
 }
