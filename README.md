@@ -45,7 +45,9 @@ These scripts expect the following on your development workstation:
 
 ## AWS Resource Dependencies
 
-**S3.** These scripts expect an S3 bucket has already been created to use as the target for the Lambda code package, and for holding Lambda funciton outputs. In running these scripts you need enough privileges on S3 to create/update objects in this bucket.
+**S3.** These scripts expect an S3 bucket has already been created to use as the target for the Lambda code package, and for holding Lambda function outputs. In running these scripts you need enough privileges on S3 to create/update objects in this bucket.
+
+In addition, the credentials for the DTR must be stored in the same S3 bucket. Use the template file `dtr-credentials.json` for the required format.
 
 **IAM Role.** The IAM role referenced in these scripts is a role that combines AWSLambdaBasicExecutionRole (a standard built-in AWS role) and a custom role that gives the Lambda function access to the specified S3 bucket. That custom role is:
 
